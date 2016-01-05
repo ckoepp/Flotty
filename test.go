@@ -52,16 +52,18 @@ func (pi *PbmImage) encode(writers []io.Writer) {
   w := writers[0]
   counter := 0
   wrr := 0
+
   for x := 0; x < len(pi.content); x++ {
 
     // counter
-    if counter >= width {
-      if wrr < len(writers) {
-        wrr = 0
-      } else {
+    if counter >= width - 1 {
+      if wrr < len(writers) - 1 {
         wrr++
+      } else {
+        wrr = 0
       }
       w = writers[wrr]
+
       counter = 0
     } else {
       counter++
@@ -72,6 +74,10 @@ func (pi *PbmImage) encode(writers []io.Writer) {
     } else {
       w.Write([]byte("0 "))
     }
+    if x % 70 == 0 {
+      w.Write([]byte("\n"))
+    }
+
   }
 }
 
